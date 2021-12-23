@@ -36,7 +36,7 @@ const uint8_t index_ov3660_html[] = R"=====(<!doctype html>
           <input type="checkbox" id="nav-toggle-cb" checked="checked">
             <nav id="menu">
               <div class="input-group hidden" id="lamp-group">
-                <label for="lamp">Light</label>
+                <label for="lamp">Onboard light</label>
                 <div class="range-min">Off</div>
                 <input type="range" id="lamp" min="0" max="100" value="0" class="default-action">
                 <div class="range-max">Full</div>
@@ -48,7 +48,10 @@ const uint8_t index_ov3660_html[] = R"=====(<!doctype html>
                   <label class="slider" for="autolamp"></label>
                 </div>
               </div>
-
+              <div class="input-group" id="relay-group">
+                <label for="toggle_relay">External light (Relay)</label>
+                <button id="toggle_relay" title="Toggle the relay for external light">Toggle</button>
+              </div>
               <div class="input-group" id="framesize-group">
                 <label for="framesize">Resolution</label>
                 <select id="framesize" class="default-action">
@@ -310,6 +313,7 @@ const uint8_t index_ov3660_html[] = R"=====(<!doctype html>
     const savePrefsButton = document.getElementById('save_prefs')
     const clearPrefsButton = document.getElementById('clear_prefs')
     const rebootButton = document.getElementById('reboot')
+    const toggleButton = document.getElementById('toggle_relay')
 
     const hide = el => {
       el.classList.add('hidden')
@@ -600,6 +604,9 @@ const uint8_t index_ov3660_html[] = R"=====(<!doctype html>
       }
     }
 
+    toggleButton.onclick = () => {
+      updateConfig(toggleButton);
+    }
   })
   </script>
 </html>)=====";

@@ -37,10 +37,14 @@ const uint8_t index_simple_html[] = R"=====(<!doctype html>
           <input type="checkbox" id="nav-toggle-cb">
             <nav id="menu" style="width:24em;">
               <div class="input-group hidden" id="lamp-group">
-                <label for="lamp">Light</label>
+                <label for="lamp">Onboard light</label>
                 <div class="range-min">Off</div>
                 <input type="range" id="lamp" min="0" max="100" value="0" class="action-setting">
                 <div class="range-max">Full</div>
+              </div>
+              <div class="input-group" id="relay-group">
+                <label for="toggle_relay">External light (Relay)</label>
+                <button id="toggle_relay" title="Toggle the relay for external light">Toggle</button>
               </div>
               <div class="input-group" id="framesize-group">
                 <label for="framesize">Resolution</label>
@@ -91,6 +95,7 @@ const uint8_t index_simple_html[] = R"=====(<!doctype html>
     const streamButton = document.getElementById('toggle-stream')
     const closeButton = document.getElementById('close-stream')
     const swapButton = document.getElementById('swap-viewer')
+    const toggleButton = document.getElementById('toggle_relay')
 
     const hide = el => {
       el.classList.add('hidden')
@@ -300,6 +305,10 @@ const uint8_t index_simple_html[] = R"=====(<!doctype html>
 
     swapButton.onclick = () => {
       window.open('/?view=full','_self');
+    }
+
+    toggleButton.onclick = () => {
+      updateConfig(toggleButton);
     }
 
   })

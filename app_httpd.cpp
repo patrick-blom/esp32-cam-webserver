@@ -32,6 +32,7 @@
 extern void flashLED(int flashtime);
 extern void setLamp(int newVal);
 extern void printLocalTime(bool extraData);
+extern void toggleRelay();
 
 // External variables declared in the main .ino
 extern char myName[];
@@ -372,6 +373,9 @@ static esp_err_t cmd_handler(httpd_req_t *req){
         } else {
             setLamp(lampVal);
         }
+    }
+    else if(!strcmp(variable, "toggle_relay")) {
+       toggleRelay();
     }
     else if(!strcmp(variable, "save_prefs")) {
         if (filesystem) savePrefs(SPIFFS);
