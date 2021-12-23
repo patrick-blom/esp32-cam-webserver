@@ -167,6 +167,10 @@ struct station stationList[] = {{"ssid1", "pass1", true},
 // Uncomment to enable camera debug info on serial by default
 // #define DEBUG_DEFAULT_ON
 
+// Uncomment to enable the relay pin AI_THINKER only
+// #define RELAY_PIN_ON
+// #define RELAY_PIN_DEFAULT LOW
+
 /*
  * Camera Hardware Selectiom
  *
