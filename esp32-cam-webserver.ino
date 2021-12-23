@@ -210,12 +210,44 @@ bool debugData;
 
 void debugOn() {
     debugData = true;
-    Serial.println("Camera debug data is enabled (send 'd' for status dump, or any other char to disable debug)");
+    Serial.println("Camera debug data is enabled (send 'd' for status dump, send 'r' for toggling the relay, or any other char to disable debug)");
 }
 
 void debugOff() {
     debugData = false;
-    Serial.println("Camera debug data is disabled (send 'd' for status dump, or any other char to enable debug)");
+    Serial.println("Camera debug data is disabled (send 'd' for status dump, send 'r' for toggling the relay, or any other char to enable debug)");
+}
+
+void toggleRelay(){
+    #if defined(RELAY_PIN_ON)
+        #if defined(CAMERA_MODEL_AI_THINKER)
+            if (debugData){
+                String cur_val;
+                if(digitalRead(RELAY_PIN) == 0){
+                  cur_val = "LOW";
+                }else{
+                  cur_val = "HIGH";
+                }
+                Serial.printf("current state of the relay pin: %s\r\n", cur_val);
+            }
+
+            digitalWrite(RELAY_PIN, !digitalRead(RELAY_PIN));
+
+            if (debugData){
+                String new_val;
+                if(digitalRead(RELAY_PIN) == 0){
+                  new_val = "LOW";
+                }else{
+                  new_val = "HIGH";
+                }
+                Serial.printf("new state of the relay pin: %s\r\n", new_val);
+            }
+        #else
+            Serial.println("The relay function is only supported on camrea model ai thinker!");
+        #endif
+    #else
+        Serial.println("Relayfunction not active.");
+    #endif
 }
 
 // Serial input (debugging controls)
@@ -224,7 +256,11 @@ void handleSerial() {
         char cmd = Serial.read();
         if (cmd == 'd' ) {
             serialDump();
-        } else {
+        } 
+        else if (cmd == 'r' ) {
+            toggleRelay();
+        }
+        else {
             if (debugData) debugOff();
             else debugOn();
         }
@@ -648,6 +684,17 @@ void setup() {
     /*
     * Camera setup complete; initialise the rest of the hardware.
     */
+
+    // Initialise the relay pin
+    #if defined(RELAY_PIN_ON)
+        #if defined(CAMERA_MODEL_AI_THINKER)
+            Serial.printf("Relay function active, using pin: %d\n\r", RELAY_PIN);
+            digitalWrite(RELAY_PIN, RELAY_PIN_DEFAULT);
+            pinMode(RELAY_PIN, OUTPUT);
+        #else
+            Serial.println("The relay function is only supported on camrea model ai thinker!");
+        #endif
+    #endif
 
     // Initialise and set the lamp
     if (lampVal != -1) {
